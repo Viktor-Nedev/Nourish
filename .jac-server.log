@@ -30,3 +30,4 @@ INFO - APScheduler not installed — dynamic scheduling disabled. Install with: 
 👀 Watching for changes...
    Monitoring: **/*.jac (33 files)
 
+command terminated with exit code 137
