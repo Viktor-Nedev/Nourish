@@ -69,35 +69,40 @@ def:pub AuthPage() -> JsxElement {
 
     return (
         <div className="auth-page">
-            <div className="auth-left">
-                <div>
-                    <div className="flex items-center gap-2 mb-8">
-                        <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                            <Leaf size={20} color="white" />
+            <div className="auth-left relative overflow-hidden">
+                <div className="bg-animated-gradient absolute inset-0" />
+                <div className="hero-particle" style={{"width": "250px", "height": "250px", "top": "-10%", "right": "-10%", "animationDuration": "10s"}} />
+                <div className="hero-particle" style={{"width": "150px", "height": "150px", "bottom": "10%", "left": "-5%", "animationDelay": "3s", "background": "rgba(245,158,11,0.12)"}} />
+
+                <div className="relative z-10 anim-fade-in-left">
+                    <div className="flex items-center gap-3 mb-10">
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{"background": "rgba(255,255,255,0.15)"}}>
+                            <Leaf size={22} color="white" />
                         </div>
-                        <span className="text-2xl font-bold">{"Nourish"}</span>
+                        <span className="text-2xl font-bold text-white">{"Nourish"}</span>
                     </div>
-                    <h2 className="text-3xl font-bold mb-4">{"Rescue food. Feed communities."}</h2>
-                    <p className="text-white/70 text-base leading-relaxed">
+                    <h2 className="text-4xl font-bold text-white mb-5 leading-tight">{"Rescue food."}<br />{"Feed communities."}</h2>
+                    <p className="text-white/70 text-base leading-relaxed mb-10">
                         {"Join thousands of organizations and individuals working together to eliminate food waste and fight hunger."}
                     </p>
                 </div>
-                <div className="flex flex-col gap-3">
+
+                <div className="relative z-10 flex flex-col gap-4 anim-fade-in-up delay-300">
                     <div className="flex items-center gap-3 text-white/80 text-sm">
-                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                            <Check size={12} />
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{"background": "rgba(255,255,255,0.15)"}}>
+                            <Check size={13} />
                         </div>
                         {"Real-time food matching with AI"}
                     </div>
                     <div className="flex items-center gap-3 text-white/80 text-sm">
-                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                            <Check size={12} />
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{"background": "rgba(255,255,255,0.15)"}}>
+                            <Check size={13} />
                         </div>
                         {"Live map of donations and requests"}
                     </div>
                     <div className="flex items-center gap-3 text-white/80 text-sm">
-                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                            <Check size={12} />
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{"background": "rgba(255,255,255,0.15)"}}>
+                            <Check size={13} />
                         </div>
                         {"Impact tracking and analytics"}
                     </div>
@@ -105,7 +110,7 @@ def:pub AuthPage() -> JsxElement {
             </div>
 
             <div className="auth-right">
-                <div className="auth-form-box">
+                <div className="auth-form-box anim-fade-in-right">
                     <div className="mb-8">
                         <h1 className="text-2xl font-bold text-foreground mb-1">
                             {"Welcome back" if tab == "login" else "Create your account"}
@@ -125,11 +130,11 @@ def:pub AuthPage() -> JsxElement {
                     </div>
 
                     {tab == "register" and
-                        <div className="mb-5">
+                        <div className="mb-5 anim-scale-in">
                             <div className="label">{"I am a..."}</div>
                             <div className="grid grid-cols-2 gap-3">
                                 <button
-                                    className={"card card-p flex flex-col items-center gap-2 cursor-pointer border-2 " + ("border-primary bg-primary-light" if role == "user" else "border-border")}
+                                    className={"card card-p flex flex-col items-center gap-2 cursor-pointer border-2 card-cinematic " + ("border-primary bg-primary-light" if role == "user" else "border-border")}
                                     onClick={set_role_user}
                                 >
                                     <User size={24} className={"text-primary" if role == "user" else "text-muted-foreground"} />
@@ -137,7 +142,7 @@ def:pub AuthPage() -> JsxElement {
                                     <span className="text-xs text-muted-foreground text-center">{"Find food, make requests"}</span>
                                 </button>
                                 <button
-                                    className={"card card-p flex flex-col items-center gap-2 cursor-pointer border-2 " + ("border-primary bg-primary-light" if role == "org" else "border-border")}
+                                    className={"card card-p flex flex-col items-center gap-2 cursor-pointer border-2 card-cinematic " + ("border-primary bg-primary-light" if role == "org" else "border-border")}
                                     onClick={set_role_org}
                                 >
                                     <Building2 size={24} className={"text-primary" if role == "org" else "text-muted-foreground"} />
@@ -149,22 +154,22 @@ def:pub AuthPage() -> JsxElement {
                     }
 
                     <form onSubmit={handle_submit} className="flex flex-col gap-4">
-                        <div className="form-group">
+                        <div className="form-group anim-fade-in-up delay-100">
                             <label className="label">{"Username"}</label>
                             <input className="input" type="text" placeholder="Enter username" value={username} onChange={handle_username} required={True} />
                         </div>
-                        <div className="form-group">
+                        <div className="form-group anim-fade-in-up delay-200">
                             <label className="label">{"Password"}</label>
                             <input className="input" type="password" placeholder="Enter password" value={password} onChange={handle_password} required={True} />
                         </div>
                         {tab == "register" and
-                            <div className="form-group">
+                            <div className="form-group anim-fade-in-up delay-300">
                                 <label className="label">{"Confirm Password"}</label>
                                 <input className="input" type="password" placeholder="Confirm password" value={confirm_pw} onChange={handle_confirm} required={True} />
                             </div>
                         }
-                        {error and <div className="error-box">{error}</div>}
-                        <button className="btn btn-primary w-full" type="submit" disabled={loading}>
+                        {error and <div className="error-box anim-scale-in">{error}</div>}
+                        <button className="btn btn-primary w-full btn-cinematic ripple-container anim-fade-in-up delay-400" type="submit" disabled={loading}>
                             {loading and <span className="spinner" />}
                             {not loading and (("Sign in" if tab == "login" else "Create account"))}
                         </button>
