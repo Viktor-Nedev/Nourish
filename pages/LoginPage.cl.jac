@@ -1,4 +1,5 @@
 import from "@jac/runtime" { useNavigate, jacLogin, jacSignup }
+import from "lucide-react" { Leaf }
 
 def:pub page() -> JsxElement {
     has is_login: bool = True;
@@ -9,7 +10,7 @@ def:pub page() -> JsxElement {
 
     navigate = useNavigate();
 
-    async def handle_submit(e: any) -> None {
+    async def handle_submit(e: FormEvent) -> None {
         e.preventDefault();
         loading = True;
         error = "";
@@ -19,36 +20,31 @@ def:pub page() -> JsxElement {
                 if login_res {
                     navigate("/dashboard");
                 } else {
-                    error = "Invalid username or password";
+                    error = "Invalid username or password.";
                 }
             } else {
                 signup_res = await jacSignup(username, password);
                 if signup_res {
-                    login_after_signup = await jacLogin(username, password);
-                    if login_after_signup {
+                    login_after = await jacLogin(username, password);
+                    if login_after {
                         navigate("/dashboard");
                     } else {
-                        error = "Account created — please sign in";
+                        error = "Account created — please sign in.";
                     }
                 } else {
                     error = "Signup failed. Username may already be taken.";
                 }
             }
-        } except Exception as e {
+        } except Exception as ex {
             error = "Authentication error. Please try again.";
         }
         loading = False;
     }
 
-    def handle_username(e: any) -> None {
-        username = e.target.value;
-    }
+    def handle_username(e: ChangeEvent) -> None { username = e.target.value; }
+    def handle_password(e: ChangeEvent) -> None { password = e.target.value; }
 
-    def handle_password(e: any) -> None {
-        password = e.target.value;
-    }
-
-    def toggle_mode() -> None {
+    def toggle_mode(e: MouseEvent) -> None {
         is_login = not is_login;
         error = "";
     }
@@ -57,66 +53,63 @@ def:pub page() -> JsxElement {
         <div className="auth-page">
             <div className="auth-container">
                 <div className="auth-header">
-<h1>{"Welcome" if is_login else "Create account"}</h1>
-                    <p>{"Sign in to continue" if is_login else "Get started for free"}</p>
-                </div>
-                <div className="auth-card">
-                    {error and (
-                        <div className="error-box mb-5">
-                            {error}
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                        <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
+                            <Leaf size={16} color="white" strokeWidth={2} />
                         </div>
-                    )}
-                    <form
-                        onSubmit={handle_submit}
-                        className="auth-form"
-                    >
+                        <span className="text-xl font-bold text-foreground tracking-tight">{"Nourish"}</span>
+                    </div>
+                    <h1>{"Sign in" if is_login else "Create account"}</h1>
+                    <p>{"Food Rescue Dispatcher Platform" if is_login else "Join the food rescue network"}</p>
+                </div>
+
+                <div className="auth-card">
+                    <form className="auth-form" onSubmit={handle_submit}>
                         <div>
-                            <label className="label">Username</label>
+                            <label className="label">{"Username"}</label>
                             <input
                                 className="input"
                                 type="text"
+                                placeholder="Enter username"
                                 value={username}
                                 onChange={handle_username}
-                                placeholder="Enter your username"
                                 required={True}
-                                autoComplete="username"
                             />
                         </div>
                         <div>
-                            <label className="label">Password</label>
+                            <label className="label">{"Password"}</label>
                             <input
                                 className="input"
                                 type="password"
+                                placeholder="Enter password"
                                 value={password}
                                 onChange={handle_password}
-                                placeholder="••••••••"
                                 required={True}
-                                autoComplete="current-password"
                             />
                         </div>
+
+                        {error and <div className="error-box">{error}</div>}
+
                         <button
-                            className="btn btn-primary w-full h-12 mt-1"
+                            className="btn btn-primary w-full"
                             type="submit"
                             disabled={loading}
                         >
-                            {(
-                                ("Signing in..." if is_login else "Signing up...")
-                                if loading
-                                else ("Sign in" if is_login else "Sign up")
-                            )}
+                            {("Signing in..." if loading else "Sign in") if is_login else ("Creating account..." if loading else "Create account")}
                         </button>
                     </form>
+
                     <div className="auth-toggle">
-                        {"Don't have an account? " if is_login else "Already have an account? "}
-                        <button
-                            type="button"
-                            className="toggle-btn"
-                            onClick={toggle_mode}
-                        >
+                        {("No account? " if is_login else "Already have an account? ")}
+                        <button className="toggle-btn" onClick={toggle_mode}>
                             {"Sign up" if is_login else "Sign in"}
                         </button>
                     </div>
                 </div>
+
+                <p className="text-center text-xs text-muted-foreground mt-5">
+                    {"Connecting surplus food with those who need it most."}
+                </p>
             </div>
         </div>
     );
