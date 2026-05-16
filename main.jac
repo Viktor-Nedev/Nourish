@@ -1,6 +1,5 @@
 """
 main.jac — Nourish App entry point.
-Imports server-side symbols and mounts the client app.
 """
 
 import from services.nourish_api {
